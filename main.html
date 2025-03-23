@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notificaciones Personalizadas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f9;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    p {
+      font-size: 18px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>API de Notificaciones</h1>
+  <p>Presiona el botón para recibir una notificación personalizada.</p>
+  <button id="notify-btn">Enviar Notificación</button>
+
+  <script>
+    // Verificar si el navegador soporta la API de Notificaciones
+    if (!("Notification" in window)) {
+      alert("Tu navegador no soporta la API de Notificaciones.");
+    }
+
+    // Solicitar permiso al usuario
+    function solicitarPermiso() {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          console.log("Permiso concedido para notificaciones.");
+        } else if (permission === "denied") {
+          alert("Has denegado el permiso para notificaciones.");
+        }
+      });
+    }
+
+    // Crear y mostrar la notificación
+    function enviarNotificacion() {
+      if (Notification.permission === "granted") {
+        setTimeout(() => {
+          new Notification("Notificación Personalizada", {
+            body: "Hola, esta es tu notificación personalizada!",
+            icon: "https://via.placeholder.com/100", // URL de un icono (opcional)
+            vibrate: [200, 100, 200], // Vibración (opcional, solo dispositivos compatibles)
+          });
+        }, 1000); // Retraso de 1 segundo
+      } else {
+        alert("Por favor, concede permiso para recibir notificaciones.");
+      }
+    }
+
+    // Agregar el evento al botón
+    const notifyBtn = document.getElementById("notify-btn");
+    notifyBtn.addEventListener("click", () => {
+      if (Notification.permission === "default") {
+        solicitarPermiso();
+      } else {
+        enviarNotificacion();
+      }
+    });
+  </script>
+</body>
+</html>
